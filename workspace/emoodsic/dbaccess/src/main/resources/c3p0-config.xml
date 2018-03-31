@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<c3p0-config>
+
+    <default-config>
+        <property name="maxIdleTime">1800</property>
+        <property name="acquireRetryAttempts">0</property>
+        <property name="acquireRetryDelay">20000</property>
+        <property name="numHelperThreads">10</property>
+        <property name="preferredTestQuery">select 0 from dual</property>
+        <property name="testConnectionOnCheckin">true</property>
+        <property name="idleConnectionTestPeriod">20</property>
+    </default-config>
+
+    <named-config name="emoodsic">
+        <property name="initialPoolSize">3</property>
+        <property name="minPoolSize">3</property>
+        <property name="maxPoolSize">12</property>
+        <property name="acquireIncrement">3</property>
+    </named-config>
+
+    <named-config name="musicbrainzdb">
+        <property name="initialPoolSize">2</property>
+        <property name="minPoolSize">2</property>
+        <property name="maxPoolSize">6</property>
+        <property name="acquireIncrement">2</property>
+    </named-config>
+
+</c3p0-config>

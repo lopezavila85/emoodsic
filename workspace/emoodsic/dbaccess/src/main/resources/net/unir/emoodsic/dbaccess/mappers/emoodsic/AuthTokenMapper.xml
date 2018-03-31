@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.unir.emoodsic.dbaccess.mappers.emoodsic.AuthTokenMapper">
+
+    <delete id="cleanAuthTokens">
+    <![CDATA[
+        DELETE FROM emoodsic.authToken
+        WHERE idUser > 0
+        ]]>
+    </delete>
+    
+    <select id="getAuthTokenValue" parameterType="int" resultType="string">
+        SELECT authTokenValue
+        FROM emoodsic.authToken
+        WHERE idUser = #{value}
+    </select>
+
+    <insert id="insert" parameterType="net.unir.emoodsic.common.entities.AuthToken">
+        INSERT INTO emoodsic.authToken (idUser, authTokenValue)
+        VALUES (#{idUser}, #{authTokenValue})
+    </insert>
+
+    <update id="update" parameterType="net.unir.emoodsic.common.entities.AuthToken">
+        UPDATE emoodsic.authToken
+        SET authTokenValue = #{authTokenValue}
+        WHERE idUser = #{idUser}
+    </update>
+
+</mapper>

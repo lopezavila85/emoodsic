@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+    <!-- Properties files -->
+    <context:property-placeholder location="classpath*:*.properties" />
+
+    <!-- Services - Enable component scanning and autowire -->
+    <context:component-scan base-package="net.unir.emoodsic.dbaccess.services" scoped-proxy="interfaces"/>
+
+    <!-- DataSources -->
+    <bean id="emoodsicDS" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <constructor-arg value="emoodsic" />
+
+        <property name="driverClass" value="${jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${jdbc.url.emoodsic}" />
+        <property name="user" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
+
+    <bean id="musicbrainzdbDS" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <constructor-arg value="musicbrainzdb" />
+
+        <property name="driverClass" value="${jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${jdbc.url.musicbrainzdb}" />
+        <property name="user" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
+
+    <!-- Enable the configuration of transactional behavior based on annotations -->
+    <tx:annotation-driven transaction-manager="emoodsicTM" />
+    <tx:annotation-driven transaction-manager="musicbrainzdbTM" />
+
+    <!-- Transaction Managers -->
+    <bean id="emoodsicTM"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="emoodsicDS" />
+    </bean>
+
+    <bean id="musicbrainzdbTM"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="musicbrainzdbDS" />
+    </bean>
+
+    <!-- SqlSessionFactories -->
+    <bean id="emoodsicSqlSF" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="emoodsicDS" />
+        <property name="typeAliasesPackage" value="com.gmv.dodfw.common.entities" />
+    </bean>
+
+    <bean id="musicbrainzdbSqlSF" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="musicbrainzdbDS" />
+        <property name="typeAliasesPackage" value="net.unir.emoodsic.common.entities" />
+    </bean>
+
+    <!-- Mappers - scan for mappers and let them be autowired -->
+    <bean id="emoodsicMappers" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="net.unir.emoodsic.dbaccess.mappers.emoodsic" />
+        <property name="sqlSessionFactoryBeanName" value="emoodsicSqlSF" />
+    </bean>
+
+    <bean id="musicbrainzdbMappers" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="net.unir.emoodsic.dbaccess.mappers.musicbrainzdb" />
+        <property name="sqlSessionFactoryBeanName" value="musicbrainzdbSqlSF" />
+    </bean>
+
+    <!-- Persistence Beans 
+
+    <bean id="serverUtils" class="com.gmv.dodfw.persistence.classes.ServerUtils">
+        <property name="clusterEnabled" value="${clusterEnabled}" />
+        <property name="serverName1" value="${serverName1}" />
+        <property name="serverName2" value="${serverName2}" />
+    </bean>
+    -->
+    
+
+    <!-- DB Services -->   
+	<bean id="recSysServiceDb" class="net.unir.emoodsic.dbaccess.services.RecSysServiceDb">
+	    <property name="qbmLastNSongsRetention" value="${qbm.lastNSongsRetention}" />
+        <property name="qbmMaxDaysRetention" value="${qbm.maxDaysRetention}" />        
+        <property name="qbmMinPlaylistsAvgWeights" value="${qbm.minPlaylistsAvgWeights}" />        
+        <property name="qbmMinRecommendationTypePercent" value="${qbm.minRecommendationTypePercent}" />        
+    </bean>
+
+ 	<bean id="echoNestServiceDb" class="net.unir.emoodsic.dbaccess.services.EchoNestServiceDb">
+        <property name="apiKey" value="${echonest.apikey}" />
+        <property name="qbmMaxDaysRetention" value="${qbm.maxDaysRetention}" />
+        <property name="qbmMaxCfNeighborsPercent" value="${qbm.maxCfNeighborsPercent}" />   
+    </bean>
+    
+    <!--  Components -->
+    <bean id="configComponent" class="net.unir.emoodsic.dbaccess.classes.ConfigComponent">
+	    <property name="kdTreeKnn" value="${kdTree.knn}" />	    
+	    <property name="mlpHiddenLayers" value="${mlp.hiddenlayers}" />
+	    <property name="mlpLearningRate" value="${mlp.learningrate}" />
+        <property name="mlpMinUsers" value="${mlp.minusers}" />        
+        <property name="mlpMomentum" value="${mlp.momentum}" />
+        <property name="nbMinPctCorrect" value="${nb.minPctCorrect}" />       
+    </bean>
+        
+    <bean id="googleMapsManager" class="net.unir.emoodsic.dbaccess.classes.GoogleMapsManager">
+        <property name="apiKey" value="${maps.apikey}" />      
+    </bean>
+    
+    <bean id="youTubeManager" class="net.unir.emoodsic.dbaccess.classes.YouTubeManager">
+        <property name="apiKey" value="${youtube.apikey}" />      
+    </bean>
+
+</beans>

@@ -1,0 +1,159 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>net.unir.emoodsic</groupId>
+		<artifactId>emoodsic</artifactId>
+		<version>0.0.1</version>
+	</parent>
+	
+	<artifactId>dbaccess</artifactId>	
+	<packaging>jar</packaging>
+
+	<name>dbaccess</name>
+	<description>Classes involved in database access and transactions</description>
+  <!-- <url>http://maven.apache.org</url> -->
+
+	<properties>
+		<c3p0.version>0.9.5.1</c3p0.version>
+		<google-maps-services.version>0.1.7</google-maps-services.version>
+		<jdk.version>1.8</jdk.version>		
+		<maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+		<mybatis.version>3.3.0</mybatis.version>
+		<mybatis-spring.version>1.2.3</mybatis-spring.version>
+		<mysql.version>5.1.36</mysql.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.youtube.version>v3-rev144-1.20.0</project.youtube.version>		
+		<spring.version>4.2.0.RELEASE</spring.version>
+	</properties>
+  
+  <dependencies>
+  		<!--  MyBatis -->
+	    <dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>${mybatis.version}</version>		
+			<exclusions>
+	             <exclusion>
+	                <groupId>commons-logging</groupId>
+	                <artifactId>commons-logging</artifactId>
+	             </exclusion>
+	        </exclusions>
+		</dependency>
+
+		<!-- MyBatis Spring -->
+	    <dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>${mybatis-spring.version}</version>		
+			<exclusions>
+	             <exclusion>
+	                <groupId>commons-logging</groupId>
+	                <artifactId>commons-logging</artifactId>
+	             </exclusion>
+	        </exclusions>
+		</dependency>
+
+	    <!--  Spring -->
+	    <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>				
+			<exclusions>
+	             <exclusion>
+	                <groupId>commons-logging</groupId>
+	                <artifactId>commons-logging</artifactId>
+	             </exclusion>
+	       </exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>				
+			<exclusions>
+	             <exclusion>
+	                <groupId>commons-logging</groupId>
+	                <artifactId>commons-logging</artifactId>
+	             </exclusion>
+	        </exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>				
+			<exclusions>
+	             <exclusion>
+	                <groupId>commons-logging</groupId>
+	                <artifactId>commons-logging</artifactId>
+	             </exclusion>
+	        </exclusions>
+		</dependency>
+		
+		<!-- The Echo Nest API -->
+		<!-- Installed with: mvn install:install-file -Dfile=jEN.jar -DgroupId=com.echonest -DartifactId=api-client -Dversion=4.2.0 -Dpackaging=jar -->
+        <dependency>
+    		<groupId>com.echonest</groupId>
+    		<artifactId>api-client</artifactId>
+    		<version>4.2.0</version>
+		</dependency>
+		
+		<dependency>
+    		<groupId>com.googlecode.json-simple</groupId>
+    		<artifactId>json-simple</artifactId>
+    		<version>1.1</version>
+		</dependency>
+		
+		<!-- Youtube -->
+		<dependency>
+		    <groupId>com.google.apis</groupId>
+		    <artifactId>google-api-services-youtube</artifactId>
+		    <version>${project.youtube.version}</version>
+		</dependency>
+		
+		<!-- Google Maps -->
+		<dependency>
+		    <groupId>com.google.maps</groupId>
+		    <artifactId>google-maps-services</artifactId>
+		    <version>${google-maps-services.version}</version>
+		</dependency>
+
+	    <!-- MySql Driver -->
+	    <dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
+		</dependency>
+		
+		<!-- Connection pool -->
+	    <dependency>
+		    <groupId>com.mchange</groupId>
+		    <artifactId>c3p0</artifactId>
+		    <version>${c3p0.version}</version>
+		</dependency>
+
+	    <!-- Local -->
+		<dependency>
+			<groupId>net.unir.emoodsic</groupId>
+			<artifactId>common</artifactId>
+			<version>0.0.1</version>
+		</dependency>		
+		
+  </dependencies>
+  
+  	<build>
+		<finalName>emoodsic/dbaccess</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+</project>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.unir.emoodsic.dbaccess.mappers.emoodsic.NeighborMapper">
+
+    <select id="getIdList" resultType="int">
+        SELECT idUser
+        FROM emoodsic.neighbor
+    </select>
+    
+    <select id="getNeighbors" parameterType="int" resultType="string">
+        SELECT idNeighbors
+        FROM emoodsic.neighbor
+        WHERE idUser = #{value}
+    </select>
+
+    <insert id="insert" parameterType="net.unir.emoodsic.common.entities.Neighbor">
+        INSERT INTO  emoodsic.neighbor (idUser, idNeighbors)
+        VALUES (#{idUser}, #{idNeighbors})
+    </insert>
+    
+    <update id="update" parameterType="net.unir.emoodsic.common.entities.Neighbor">
+        UPDATE emoodsic.neighbor
+        SET idNeighbors = #{idNeighbors}
+        WHERE idUser = #{idUser}
+    </update>
+
+</mapper>

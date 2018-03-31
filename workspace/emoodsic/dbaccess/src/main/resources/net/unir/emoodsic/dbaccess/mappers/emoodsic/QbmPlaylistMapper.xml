@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.unir.emoodsic.dbaccess.mappers.emoodsic.QbmPlaylistMapper">
+
+    <select id="getCfInfo" parameterType="Map"
+        resultType="net.unir.emoodsic.common.entities.QbmPlaylist">
+         <![CDATA[
+        SELECT idQbmPlaylist, idInitialMoodCat, idFinalMoodCat, idSeedMusicPrefDimStyle
+        FROM emoodsic.qbmPlaylist
+        WHERE idUser = #{idUser}
+            AND #{minDatePlaylists} <= UNIX_TIMESTAMP(tsCreation)*1000
+            AND tasteWeight IS NOT NULL
+            AND personalityWeight IS NOT NULL
+        ]]>
+    </select>
+
+    <select id="getTasteWeights" parameterType="Map" resultType="double">
+        <![CDATA[
+        SELECT tasteWeight
+        FROM emoodsic.qbmPlaylist
+        WHERE idUser = #{idUser}
+            AND #{minDateWeightCalTime} <= UNIX_TIMESTAMP(tsCreation)*1000
+            AND tasteWeight IS NOT NULL
+            AND personalityWeight IS NOT NULL
+        ]]>
+    </select>
+    
+    <!--  
+    <select id="getAvgWeights" parameterType="Map"
+        resultType="net.unir.emoodsic.common.entities.QbmPlaylist">
+        <![CDATA[
+        SELECT AVG(tasteWeight) AS tasteWeight, AVG(personalityWeight) AS personalityWeight
+        FROM emoodsic.qbmPlaylist
+        WHERE idUser = #{idUser}
+            AND #{minDateWeightCalTime} <= UNIX_TIMESTAMP(tsCreation)*1000
+            AND tasteWeight IS NOT NULL
+            AND personalityWeight IS NOT NULL
+        ]]>
+    </select>
+    -->
+
+    <select id="getMostRecent" parameterType="int"
+        resultType="net.unir.emoodsic.common.entities.QbmPlaylist">
+        SELECT idQbmPlaylist, idUser, UNIX_TIMESTAMP(tsCreation)*1000 AS tsCreation,
+            idInitialMoodCat, idFinalMoodCat,
+            idSeedMood, gidSeedFavArtist, idSeedFavStyle, idSeedMusicPrefDimStyle, tasteSongsNum,
+            personalitySongsNum, tasteWeight, personalityWeight
+        FROM emoodsic.qbmPlaylist
+        WHERE idUser = #{value}
+        ORDER BY tsCreation DESC
+        LIMIT 1
+    </select>
+    
+    <select id="getMostRecentIds" parameterType="Map" resultType="int">
+        <![CDATA[
+        SELECT idQbmPlaylist
+        FROM emoodsic.qbmPlaylist
+        WHERE idUser = #{idUser}
+            AND #{minDateWeightCalTime} <= UNIX_TIMESTAMP(tsCreation)*1000
+            AND tasteWeight IS NOT NULL
+            AND personalityWeight IS NOT NULL
+        LIMIT 10
+        ]]>
+    </select>    
+    
+    <insert id="insert" parameterType="net.unir.emoodsic.common.entities.QbmPlaylist"
+        useGeneratedKeys="true" keyProperty="idQbmPlaylist" keyColumn="idQbmPlaylist">
+        INSERT INTO  emoodsic.qbmPlaylist (idUser, idInitialMoodCat, idFinalMoodCat, idSeedMood, gidSeedFavArtist,
+            idSeedFavStyle, idSeedMusicPrefDimStyle, tasteSongsNum, personalitySongsNum)
+        VALUES (#{idUser}, #{idInitialMoodCat}, #{idFinalMoodCat}, #{idSeedMood}, #{gidSeedFavArtist},
+            #{idSeedFavStyle}, #{idSeedMusicPrefDimStyle}, #{tasteSongsNum}, #{personalitySongsNum})
+    </insert>
+    
+    <update id="updateIdSortOrder" parameterType="net.unir.emoodsic.common.entities.QbmPlaylist">
+        UPDATE emoodsic.qbmPlaylist
+        SET idSortOrder = #{idSortOrder}            
+        WHERE idQbmPlaylist = #{idQbmPlaylist}
+    </update>
+
+    <update id="updateWeights" parameterType="net.unir.emoodsic.common.entities.QbmPlaylist">
+        UPDATE emoodsic.qbmPlaylist
+        SET tasteWeight = #{tasteWeight},
+            personalityWeight = #{personalityWeight}
+        WHERE idQbmPlaylist = #{idQbmPlaylist}
+    </update>
+
+</mapper>

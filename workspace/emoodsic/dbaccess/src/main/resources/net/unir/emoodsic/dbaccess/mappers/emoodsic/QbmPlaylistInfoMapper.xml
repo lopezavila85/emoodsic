@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.unir.emoodsic.dbaccess.mappers.emoodsic.QbmPlaylistInfoMapper">
+
+    <select id="getCfInfo" parameterType="Map"
+        resultType="net.unir.emoodsic.common.entities.QbmPlaylistInfo">
+        SELECT idQbmPlaylistInfo, gidArtistMb, artist, song, likertScore,
+            latitude, longitude, valence, arousal
+        FROM qbmPlaylistInfo
+        WHERE idQbmPlaylist = #{idQbmPlaylist}
+            AND idRecommendationType IN 
+		        <foreach item="item" index="index" collection="cfRecTypes" open="("
+                    separator="," close=")">
+                     #{item}
+                </foreach>
+    </select>
+    
+     <!-- The insertion order determines the distance to the final objective of mood. -->
+     <select id="getPlaylist" parameterType="int"
+         resultType="net.unir.emoodsic.common.entities.QbmPlaylistInfo">
+         SELECT idQbmPlaylistInfo, idQbmPlaylist, idRecommendationType, gidArtistMb, artist,
+             gidRecordingMb, song, youtubeVideoId, country, likertScore
+         FROM emoodsic.qbmPlaylistInfo
+         WHERE idQbmPlaylist = #{value}
+         ORDER BY idQbmPlaylistInfo ASC
+     </select>
+    
+     <select id="getSimpleInfo" parameterType="int"
+         resultType="net.unir.emoodsic.common.entities.QbmPlaylistInfo">
+         SELECT idQbmPlaylistInfo, gidArtistMb, artist, gidRecordingMb, song, likertScore
+         FROM emoodsic.qbmPlaylistInfo
+         WHERE idQbmPlaylist = #{value}
+         ORDER BY idQbmPlaylistInfo ASC
+     </select>
+
+     <insert id="insertList" parameterType="java.util.List">
+         INSERT INTO emoodsic.qbmPlaylistInfo (idQbmPlaylist, idRecommendationType, gidArtistMb,
+             artist, gidRecordingMb,
+             song, youtubeVideoId, latitude, longitude, country,
+             valence, arousal, playlistDistance)
+         VALUES
+         <foreach collection="list" item="qpi" separator=",">
+             (#{qpi.idQbmPlaylist}, #{qpi.idRecommendationType}, #{qpi.gidArtistMb},
+             #{qpi.artist}, #{qpi.gidRecordingMb},
+             #{qpi.song}, #{qpi.youtubeVideoId}, #{qpi.latitude}, #{qpi.longitude}, #{qpi.country},
+             #{qpi.valence}, #{qpi.arousal}, #{qpi.playlistDistance})
+         </foreach>
+     </insert>
+
+     <update id="updateLikertScores" parameterType="net.unir.emoodsic.common.entities.QbmPlaylistInfo">
+         UPDATE emoodsic.qbmPlaylistInfo
+         SET likertScore = #{likertScore}
+         WHERE idQbmPlaylistInfo = #{idQbmPlaylistInfo}
+     </update>
+
+     <update id="updateYoutubeVideoId" parameterType="net.unir.emoodsic.common.entities.QbmPlaylistInfo">
+         UPDATE emoodsic.qbmPlaylistInfo
+         SET youtubeVideoId = #{youtubeVideoId}
+         WHERE idQbmPlaylistInfo = #{idQbmPlaylistInfo}
+     </update>
+
+</mapper>

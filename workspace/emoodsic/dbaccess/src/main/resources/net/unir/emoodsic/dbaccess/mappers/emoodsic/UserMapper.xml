@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.unir.emoodsic.dbaccess.mappers.emoodsic.UserMapper">
+
+    <select id="getAuthenticationInfo" parameterType="string" resultType="net.unir.emoodsic.common.entities.User">
+        SELECT idUser, email, encryptedPassword, firstName, lastName
+        FROM emoodsic.user
+        WHERE email = #{value}
+    </select>
+     
+    <select id="getById" parameterType="int" resultType="net.unir.emoodsic.common.entities.User">
+        SELECT idUser, email, firstName, lastName, gender,
+            age, idEducation, idMusicKnowledge, persTraitO, persTraitC,
+            persTraitE, persTraitA, persTraitN, numberSongsPlaylist, musicPrefRC,
+            musicPrefIR, musicPrefUC, musicPrefER, idMusicPrefDimension
+        FROM emoodsic.user
+        WHERE idUser = #{value}
+    </select>
+    
+    <select id="getCount" resultType="int">
+        SELECT COUNT(*)
+        FROM emoodsic.user
+    </select>
+
+    <select id="getIdList" resultType="int">
+        SELECT idUser
+        FROM emoodsic.user
+    </select>
+
+    <select id="getNoPersonalityId" resultType="int">
+        SELECT idUser
+        FROM emoodsic.user
+        WHERE persTraitO is NULL
+    </select>
+    
+    <select id="getPersonalityList" resultType="net.unir.emoodsic.common.entities.User">
+        SELECT idUser, persTraitO, persTraitC,
+            persTraitE, persTraitA, persTraitN, idMusicPrefDimension
+        FROM emoodsic.user
+        WHERE persTraitO is NOT NULL
+    </select>
+
+    <select id="getPersonalityByUserList" parameterType="java.util.List"
+        resultType="net.unir.emoodsic.common.entities.User">
+        SELECT idUser, persTraitO, persTraitC,
+            persTraitE, persTraitA, persTraitN
+        FROM emoodsic.user
+        WHERE idUser IN
+        <foreach item="item" index="index" collection="list"
+            open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    
+    
+    <insert id="insert" parameterType="net.unir.emoodsic.common.entities.User"
+        useGeneratedKeys="true" keyProperty="idUser" keyColumn="idUser">
+        INSERT INTO  emoodsic.user (email, encryptedPassword, firstName, lastName, gender,
+            age, idEducation, idMusicKnowledge)
+        VALUES (#{email}, #{encryptedPassword}, #{firstName},
+            #{lastName}, #{gender},
+            #{age}, #{idEducation}, #{idMusicKnowledge})
+    </insert>
+
+     <update id="updateMusicPref" parameterType="net.unir.emoodsic.common.entities.User">
+        UPDATE emoodsic.user
+        SET musicPrefRC = #{musicPrefRC}, musicPrefIR = #{musicPrefIR}, musicPrefUC = #{musicPrefUC},
+            musicPrefER = #{musicPrefER}, idMusicPrefDimension = #{idMusicPrefDimension}
+        WHERE idUser = #{idUser}
+    </update>
+    
+     <update id="updatePersonality" parameterType="net.unir.emoodsic.common.entities.User">
+        UPDATE emoodsic.user
+        SET persTraitO = #{persTraitO}, persTraitC = #{persTraitC}, persTraitE = #{persTraitE},
+            persTraitA = #{persTraitA}, persTraitN = #{persTraitN}
+        WHERE idUser = #{idUser}
+    </update>
+    
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.unir.emoodsic.dbaccess.mappers.emoodsic.MusicPrefDimensionMapper">
+
+    <cache />
+
+    <select id="getList"
+        resultType="net.unir.emoodsic.common.entities.MusicPrefDimension">
+        SELECT idMusicPrefDimension, name, persTraitO, persTraitC, persTraitE,
+            persTraitA, persTraitN
+        FROM emoodsic.musicPrefDimension
+    </select>
+
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.unir.emoodsic.dbaccess.mappers.emoodsic.FavStyleMapper">
+ 
+    <select id="getListByIdUser" parameterType="int" resultType="net.unir.emoodsic.common.entities.FavStyle">
+        SELECT idFavStyle, idUser, idStyle
+        FROM emoodsic.favStyle
+        WHERE idUser = #{value}
+    </select>
+
+    <insert id="insertList" parameterType="java.util.List">
+        INSERT INTO emoodsic.favStyle (idUser, idStyle)
+        VALUES
+        <foreach collection="list" item="favStyle" separator=",">
+            (#{favStyle.idUser}, #{favStyle.idStyle})
+        </foreach>
+    </insert>
+   
+</mapper>

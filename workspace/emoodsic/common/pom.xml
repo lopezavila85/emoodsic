@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>net.unir.emoodsic</groupId>
+		<artifactId>emoodsic</artifactId>
+		<version>0.0.1</version>
+	</parent>	
+  
+	<artifactId>common</artifactId>	
+	<packaging>jar</packaging>
+
+	<name>common</name>
+	<description>Common classes for emoodsic recommendation system</description>
+	<!-- <url>http://maven.apache.org</url> -->
+
+	<properties>
+		<commons-codec.version>1.10</commons-codec.version>
+		<commons-math3.version>3.5</commons-math3.version>		
+		<jdk.version>1.8</jdk.version>
+		<logback.version>1.1.3</logback.version>
+		<maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<slf4j.version>1.7.12</slf4j.version>
+		<weka.version>3.6.12</weka.version>
+	</properties>
+	
+	<dependencies>
+	
+	    <!-- Logging -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+
+		<dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>   
+        </dependency>
+		
+		<!-- commons-logging bridging module -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<!-- log4j  -->
+        <dependency>
+	        <groupId>org.slf4j</groupId>
+	        <artifactId>log4j-over-slf4j</artifactId>
+	        <version>${slf4j.version}</version> 
+	        <scope>runtime</scope> 
+	    </dependency>
+	
+		<!-- Codification -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>${commons-codec.version}</version>
+		</dependency>
+		
+		<!-- Math -->
+		<dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>${commons-math3.version}</version>
+        </dependency>
+        
+		<!-- WEKA -->
+		<dependency>
+		    <groupId>nz.ac.waikato.cms.weka</groupId>
+		    <artifactId>weka-stable</artifactId>
+		    <version>${weka.version}</version>
+		</dependency>
+
+	</dependencies>
+	
+	<build>
+		<finalName>emoodsic/common</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

@@ -1,0 +1,17 @@
+@CHARSET "ISO-8859-1";
+
+#title, #instructions, #login-form-container {
+	display: inline-block;
+	margin: auto;
+	width: 100%;
+	text-align: center;
+}
+
+#login-form {
+	display: inline-block;
+	vertical-align: middle;
+	margin: auto;
+	text-align: center;
+	width: 300px;
+	margin-bottom:2%;
+}

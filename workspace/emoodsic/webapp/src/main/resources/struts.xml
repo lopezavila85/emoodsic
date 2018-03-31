@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<!-- @see https://struts.apache.org/docs/struts-defaultxml.html -->
+
+<struts>
+
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.custom.i18n.resources" value="global" />
+    
+	<package name="emoodsic-webapp" extends="struts-default,json-default">
+	
+        <interceptors>
+            
+            <interceptor name="authenticationInterceptor"
+                class="net.unir.emoodsic.webapp.interceptors.AuthenticationInterceptor">
+        	</interceptor>
+
+            <!--
+            <interceptor name="currentPageInterceptor"
+                class="net.unir.emoodsic.webapp.interceptors.CurrentPageInterceptor">
+        	</interceptor>
+            <interceptor-ref name="currentPageInterceptor" />
+            -->
+
+	        <interceptor-stack name="authStack">	            
+                <interceptor-ref name="defaultStack">
+                    <param name="exception.logEnabled">true</param>
+                    <param name="exception.logLevel">ERROR</param>
+                    <param name="params.excludeParams">
+                        dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,
+                        ^servlet(Request|Response)\..*,parameters\...*,submit,_,d-\d+?-[sop],nd,_search</param>                    
+                </interceptor-ref>                
+            </interceptor-stack>            
+            
+            <interceptor-stack name="mainStack">
+                <interceptor-ref name="authStack" />
+                <interceptor-ref name="authenticationInterceptor" />             
+            </interceptor-stack>
+
+            <interceptor-stack name="jsonStack">
+                <interceptor-ref name="defaultStack">
+                    <param name="exception.logEnabled">true</param>
+                    <param name="exception.logLevel">ERROR</param>
+                    <param name="params.excludeParams">
+                        dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,
+                        ^servlet(Request|Response)\..*,parameters\...*,submit,_,d-\d+?-[sop],nd,_search</param>
+                </interceptor-ref>
+            </interceptor-stack>
+
+        </interceptors>
+	
+	   <!-- http://stackoverflow.com/questions/12749251/struts2-i18ninterceptor-return-to-same-page-or-action -->
+	   <!-- http://stackoverflow.com/questions/18407063/i18n-on-dropdown-menu-using-sselect-tag -->
+	   <action name="locale" class="net.unir.emoodsic.webapp.action.LocaleAction">
+           <interceptor-ref name="i18n"/>
+           <interceptor-ref name="basicStack"/>
+           <result type="redirectAction">${forwardAction}</result>
+	   </action>
+	   
+	   <action name="authentication"
+            class="net.unir.emoodsic.webapp.action.AuthenticationAction"
+            method="execute">
+            <interceptor-ref name="authStack" />
+            <result name="success">/WEB-INF/jsp/main.jsp</result>
+            <result name="error">/index.jsp</result>
+            <result name="input">/index.jsp</result>
+            <result name="not-logged">/index.jsp</result>
+        </action>
+        
+        <action name="logout"
+            class="net.unir.emoodsic.webapp.action.LogoutAction"
+            method="execute">
+            <result name="success">/index.jsp</result>
+        </action>
+        
+        <action name="queryByMood"
+            class="net.unir.emoodsic.webapp.action.QueryByMoodAction"
+            method="execute">
+            <interceptor-ref name="mainStack" />
+            <result name="success">/WEB-INF/jsp/qbm.jsp</result>
+            <result name="input">/WEB-INF/jsp/qbm.jsp</result>
+            <result name="error">/WEB-INF/jsp/main.jsp</result>
+            <result name="not-logged">/index.jsp</result>
+        </action>
+        
+        <action name="home"
+            class="net.unir.emoodsic.webapp.action.HomeAction"
+            method="execute">
+            <interceptor-ref name="mainStack" />
+            <result name="success">/WEB-INF/jsp/main.jsp</result>
+        </action>      
+        
+        <!-- JSON -->
+	    <action name="jsonMoodCategory"
+            class="net.unir.emoodsic.webapp.json.MoodCategoryAction">
+            <interceptor-ref name="jsonStack" />
+            <result name="success" type="json" />
+            <result name="not-logged">/index.jsp</result>
+        </action>
+        
+        <action name="generateQbmPlaylist"
+            class="net.unir.emoodsic.webapp.json.CreateQbmPlaylistAction">
+            <interceptor-ref name="jsonStack" />
+            <result name="success" type="json" />
+            <result name="input">/WEB-INF/jsp/qbm.jsp</result>
+            <result name="error">/WEB-INF/jsp/qbm.jsp</result>
+            <result name="not-logged">/index.jsp</result>
+        </action>
+        
+        <action name="qbmPlaylistLoad"
+            class="net.unir.emoodsic.webapp.json.LoadQbmPlaylistAction">
+            <interceptor-ref name="jsonStack" />
+            <result name="success" type="json" />
+            <result name="not-logged">/index.jsp</result>
+        </action>
+        
+        <action name="qbmPlaylistScoreSong"
+            class="net.unir.emoodsic.webapp.json.ScoreQbmPlaylistSongAction">
+            <interceptor-ref name="jsonStack" />
+            <result name="success" type="json" />
+             <result name="input" type="json" />
+            <result name="error" type="json" />
+            <result name="not-logged">/index.jsp</result>
+        </action>
+        
+        <action name="qbmPlaylistScore"
+            class="net.unir.emoodsic.webapp.json.ScoreQbmPlaylistAction">
+            <interceptor-ref name="jsonStack" />
+            <result name="success" type="json" />
+             <result name="input" type="json" />
+            <result name="error" type="json" />
+            <result name="not-logged">/index.jsp</result>
+        </action>        
+        
+    </package>
+	
+</struts>
